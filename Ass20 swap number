@@ -1,0 +1,35 @@
+#include <stdio.h>
+
+// Without pointers (call by value)
+void swap_value(int a, int b) {
+    int temp;
+    temp = a;
+    a = b;
+    b = temp;
+
+    printf("Inside swap_value (after swap): a = %d, b = %d\n", a, b);
+}
+
+// With pointers (call by reference)
+void swap_pointer(int *a, int *b) {
+    int temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main() {
+    int x = 10, y = 20;
+
+    printf("Before swapping: x = %d, y = %d\n", x, y);
+
+    // Call by value
+    swap_value(x, y);
+    printf("After swap_value (in main): x = %d, y = %d\n", x, y);
+
+    // Call by reference
+    swap_pointer(&x, &y);
+    printf("After swap_pointer (in main): x = %d, y = %d\n", x, y);
+
+    return 0;
+}
