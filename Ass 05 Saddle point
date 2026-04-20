@@ -1,0 +1,155 @@
+#include <stdio.h>
+
+// Function to display matrix
+void display(int r, int c, int mat[r][c]) {
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            printf("%d ", mat[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Function to find saddle point
+void saddlePoint(int r, int c, int mat[r][c]) {
+    int found = 0;
+
+    for(int i = 0; i < r; i++) {
+        int min = mat[i][0];
+        int colIndex = 0;
+
+        // Find minimum in row
+        for(int j = 1; j < c; j++) {
+            if(mat[i][j] < min) {
+                min = mat[i][j];
+                colIndex = j;
+            }
+        }
+
+        // Check if it is maximum in column
+        int isSaddle = 1;
+        for(int k = 0; k < r; k++) {
+            if(mat[k][colIndex] > min) {
+                isSaddle = 0;
+                break;
+            }
+        }
+
+        if(isSaddle) {
+            printf("Saddle Point: %d\n", min);
+            found = 1;
+        }
+    }
+
+    if(!found)
+        printf("No Saddle Point found\n");
+}
+
+// Function to find inverse of 2x2 matrix
+void inverse2x2(int mat[2][2]) {
+    int a = mat[0][0], b = mat[0][1];
+    int c = mat[1][0], d = mat[1][1];
+
+    int det = a*d - b*c;
+
+    if(det == 0) {
+        printf("No inverse possible (determinant = 0)\n");
+        return;
+    }
+
+    printf("Inverse Matrix:\n");
+    printf("%f %f\n", (float)d/det, (float)-b/det);
+    printf("%f %f\n", (float)-c/det, (float)a/det);
+}
+
+// Function to check magic square
+void magicSquare(int n, int mat[n][n]) {
+    int sum = 0;
+
+    // Sum of first row
+    for(int j = 0; j < n; j++)
+        sum += mat[0][j];
+
+    int flag = 1;
+
+    // Check rows
+    for(int i = 1; i < n; i++) {
+        int rowSum = 0;
+        for(int j = 0; j < n; j++)
+            rowSum += mat[i][j];
+        if(rowSum != sum)
+            flag = 0;
+    }
+
+    // Check columns
+    for(int j = 0; j < n; j++) {
+        int colSum = 0;
+        for(int i = 0; i < n; i++)
+            colSum += mat[i][j];
+        if(colSum != sum)
+            flag = 0;
+    }
+
+    // Check diagonals
+    int diag1 = 0, diag2 = 0;
+    for(int i = 0; i < n; i++) {
+        diag1 += mat[i][i];
+        diag2 += mat[i][n - i - 1];
+    }
+
+    if(diag1 != sum || diag2 != sum)
+        flag = 0;
+
+    if(flag)
+        printf("Magic Square\n");
+    else
+        printf("Not a Magic Square\n");
+}
+
+int main() {
+    int r, c;
+
+    printf("Enter rows and columns: ");
+    scanf("%d %d", &r, &c);
+
+    int A[r][c], B[r][c], sum[r][c];
+
+    // Input matrices
+    printf("Enter elements of Matrix A:\n");
+    for(int i = 0; i < r; i++)
+        for(int j = 0; j < c; j++)
+            scanf("%d", &A[i][j]);
+
+    printf("Enter elements of Matrix B:\n");
+    for(int i = 0; i < r; i++)
+        for(int j = 0; j < c; j++)
+            scanf("%d", &B[i][j]);
+
+    // Addition
+    for(int i = 0; i < r; i++)
+        for(int j = 0; j < c; j++)
+            sum[i][j] = A[i][j] + B[i][j];
+
+    printf("\nSum Matrix:\n");
+    display(r, c, sum);
+
+    // Saddle Point
+    printf("\nChecking Saddle Point in Sum Matrix:\n");
+    saddlePoint(r, c, sum);
+
+    // Inverse (only if 2x2)
+    if(r == 2 && c == 2) {
+        printf("\nInverse of Matrix A:\n");
+        inverse2x2(A);
+    }
+
+    // Magic Square (only if square)
+    if(r == c) {
+        printf("\nChecking Magic Square for Matrix A:\n");
+        magicSquare(r, A);
+    }
+
+    printf("\nProgram Ended\n");
+
+    return 0;
+}
